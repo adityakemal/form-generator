@@ -85,24 +85,24 @@ export default function FormGenerator({
         ref={formRef}
         id={id}
         onFinishFailed={(failData) => console.log(failData)}
-        // labelCol={{
-        //   span: 4,
-        // }}
-        // wrapperCol={{
-        //   span: 14,
-        // }}
+        labelCol={{
+          span: 0,
+        }}
+        wrapperCol={{
+          span: 14,
+        }}
         onFinish={(value) => {
           //filter value formatted
           for (const objForm of data) {
             if (objForm.type === "date") {
               value[objForm.name] = moment(value[objForm.name]).format(
-                objForm.format
+                objForm.payloadFormat
               );
             }
             if (objForm.type === "range") {
               value[objForm.name] = [
-                moment(value[objForm.name][0]).format(objForm.format),
-                moment(value[objForm.name][1]).format(objForm.format),
+                moment(value[objForm.name][0]).format(objForm.payloadFormat),
+                moment(value[objForm.name][1]).format(objForm.payloadFormat),
               ];
             }
           }
@@ -115,6 +115,7 @@ export default function FormGenerator({
         style={{ ...formStyle }}
       >
         {data.map((res, i) => {
+          //TEXT
           if (res?.type === "text")
             return (
               <Form.Item
@@ -126,6 +127,7 @@ export default function FormGenerator({
                 <Input placeholder={res?.placeholder} />
               </Form.Item>
             );
+          //NUMBER
           if (res?.type === "number") {
             return (
               <Form.Item
@@ -142,6 +144,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
+          //TEL
           if (res?.type === "tel") {
             return (
               <Form.Item
@@ -154,7 +157,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
-
+          //SELECT
           if (res?.type === "select")
             return (
               <Form.Item
@@ -190,6 +193,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
+          //RADIO
           if (res?.type === "radio") {
             return (
               <Form.Item
@@ -208,6 +212,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
+          //SLIDER
           if (res?.type === "slider") {
             return (
               <Form.Item
@@ -220,6 +225,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
+          //SWITCH
           if (res?.type === "switch") {
             return (
               <Form.Item
@@ -232,6 +238,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
+          //DATE
           if (res?.type === "date") {
             return (
               <Form.Item
@@ -240,10 +247,20 @@ export default function FormGenerator({
                 name={res.name}
                 rules={res?.rules}
               >
-                <DatePicker format={res.format} />
+                <DatePicker
+                  format={res.previewFormat}
+                  disabledDate={(current) => {
+                    return (
+                      (current &&
+                        current < moment(res?.minDate, "YYYY-MM-DD")) ||
+                      current > moment(res?.maxDate, "YYYY-MM-DD")
+                    );
+                  }}
+                />
               </Form.Item>
             );
           }
+          //RANGE DATE PICKER
           if (res?.type === "range") {
             return (
               <Form.Item
@@ -252,17 +269,20 @@ export default function FormGenerator({
                 name={res.name}
                 rules={res?.rules}
               >
-                <RangePicker />
+                <RangePicker
+                  format={res.previewFormat}
+                  disabledDate={(current) => {
+                    return (
+                      (current &&
+                        current < moment(res?.minDate, "YYYY-MM-DD")) ||
+                      current > moment(res?.maxDate, "YYYY-MM-DD")
+                    );
+                  }}
+                />
               </Form.Item>
             );
           }
-          //   if (res?.type === "upload") {
-          //     return (
-          //       <Form.Item label={res.label} key={i} name={res.name} rules={res?.rules}>
-          //         <Upload.Dragger />
-          //       </Form.Item>
-          //     );
-          //   }
+          //TEXTAREA
           if (res?.type === "textarea") {
             return (
               <Form.Item

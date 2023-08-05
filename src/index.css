@@ -1,3 +1,13 @@
+
+.ant-form-item-label label{
+  font-size: 14px !important;
+}
+
+.ant-form-item-label{
+  padding-bottom: 0px !important;
+}
+
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

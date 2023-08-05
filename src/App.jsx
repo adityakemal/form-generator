@@ -1,3 +1,5 @@
+import moment from "moment";
+// import "moment/locale/id";
 import "./App.css";
 import { Button } from "antd";
 import FormGenerator from "./components/FormGenerator";
@@ -50,7 +52,7 @@ function App() {
       min: 18,
       max: 70,
     },
-    //NUMBER
+    //PHONE WITH INDONESIAN FORMAT RULES
     {
       name: "phone",
       label: "Telephone",
@@ -118,7 +120,7 @@ function App() {
       max: 100,
       rules: [{ required: true, message: "This field is required!" }],
     },
-    //Switch
+    //SWITCH
     {
       name: "status",
       label: "Status",
@@ -130,18 +132,26 @@ function App() {
       name: "birthday",
       label: "Birthday",
       type: "date",
-      format: "DD-MM-YYYY",
+      previewFormat: "DD MMM YYYY", //for preview
+      payloadFormat: "DD-MM-YYYY", // for payload
       rules: [{ required: true, message: "This field is required!" }],
+      //minDate and maxDate are optional
+      // minDate: moment(new Date("2023-08-04")).format("YYYY-MM-DD"), //format YYYY-MM-DD , type string
+      // maxDate: moment(new Date(), "YYYY-MM-DD").add(1, "day"), //today //format YYYY-MM-DD , type string
     },
-    //date range
+    //DATE RANGE
     {
       name: "date_range",
       label: "Date Range",
       type: "range",
-      format: "DD-MM-YYYY",
+      previewFormat: "DD MMM YYYY",
+      payloadFormat: "DD-MM-YYYY",
       rules: [{ required: true, message: "This field is required!" }],
+      //minDate and maxDate are optional
+      minDate: moment(new Date(), "YYYY-MM-DD").subtract(1, "month"), //format YYYY-MM-DD , type string
+      maxDate: moment(new Date(), "YYYY-MM-DD").add(1, "day"), //today //format YYYY-MM-DD , type string
     },
-    //IMAGE
+    //IMAGE SINGLE TYPE
     {
       name: "avatar",
       label: "Avatar",
@@ -157,6 +167,7 @@ function App() {
 
   return (
     <>
+      {moment(new Date(), "YYYY-MM-DD HH:mm:ss").toString()}
       <FormGenerator
         onFinish={handleSubmit}
         data={dataForm}
