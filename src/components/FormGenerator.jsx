@@ -290,7 +290,7 @@ export default function FormGenerator({
                   customRequest={() => {}}
                   showUploadList={false}
                   accept="image/png, image/jpg, image/jpeg"
-                  showRemoveIcon
+                  multiple
                   //   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                   //   beforeUpload={beforeUpload}
                   onChange={(info) =>
@@ -303,11 +303,26 @@ export default function FormGenerator({
                       alt="avatar"
                       style={{
                         width: "100%",
+                        objectFit: "contain",
+                        aspectRatio: "1/1",
                       }}
                     />
                   ) : (
                     <Button>Upload</Button>
                   )}
+                  {/* {formRef?.current?.getFieldValue(res.name) ? (
+                    <img
+                      src={formRef?.current?.getFieldValue(res.name)}
+                      alt="avatar"
+                      style={{
+                        width: "100%",
+                        objectFit: "contain",
+                        aspectRatio: "1/1",
+                      }}
+                    />
+                  ) : (
+                    <Button>Upload</Button>
+                  )} */}
                 </Upload>
               </Form.Item>
             );
