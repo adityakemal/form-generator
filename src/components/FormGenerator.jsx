@@ -278,6 +278,7 @@ export default function FormGenerator({
                 key={i}
                 name={res.name}
                 rules={res?.rules}
+                initialValue={res.min}
               >
                 <Slider min={res.min} max={res.max} />
               </Form.Item>
@@ -292,7 +293,7 @@ export default function FormGenerator({
                 name={res.name}
                 rules={res?.rules}
                 valuePropName="checked"
-                // initialValue
+                initialValue
               >
                 <Switch
                   style={{
