@@ -14,6 +14,46 @@ function App() {
       placeholder: "Name",
       rules: [{ required: true, message: "This field is required!" }],
     },
+    {
+      name: "email",
+      label: "Email",
+      type: "email",
+      placeholder: "Email address",
+      rules: [{ required: true, message: "This field is required!" }],
+    },
+    //PASSWORD
+    // regex ref :
+    // Minimum eight characters, at least one letter and one number: "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+    // Minimum eight characters, at least one letter, one number and one special character: "^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+    // Minimum eight characters, at least one uppercase letter, one lowercase letter and one number: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+    // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character: "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+
+    {
+      name: "password",
+      label: "Password",
+      type: "password",
+      placeholder: "Password",
+      rules: [
+        { required: true, message: "This field is required!" },
+        {
+          pattern: new RegExp(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/g
+          ),
+          message:
+            "Minimum eight characters, at least one letter, one number and one special character",
+        },
+      ],
+    },
+    //CONFIRMATION PASSWORD
+    {
+      name: "confirm",
+      label: "Confirm Password",
+      type: "confirm_password",
+      confirmationWith: "password", //  name input to validate value are same
+      placeholder: "Confirm Password",
+      rules: [{ required: true, message: "This field is required!" }],
+    },
+
     //TEXT with number only
     {
       name: "ktp",
@@ -126,6 +166,8 @@ function App() {
       label: "Status",
       type: "switch",
       rules: [{ required: true, message: "This field is required!" }],
+      checkedChildren: "YES",
+      unCheckedChildren: "NO",
     },
     //DATE
     {
@@ -156,7 +198,7 @@ function App() {
       name: "avatar",
       label: "Avatar",
       type: "single_image",
-      uploadType: "base64", //default= 'file', options= "base64", "file", type string
+      uploadType: "file", //default= 'file', options= "base64", "file", type string
       rules: [{ required: true, message: "This field is required!" }],
     },
   ];
@@ -167,19 +209,22 @@ function App() {
 
   return (
     <>
-      {moment(new Date(), "YYYY-MM-DD HH:mm:ss").toString()}
-      <FormGenerator
-        onFinish={handleSubmit}
-        data={dataForm}
-        id="dynamicForm"
-        size="default" //small , default , large
-        layout="vertical" //vertical, horizontal
-        scrollToFirstError={true} //scroll to first error
-        // formStyle={{ maxWidth: "100%" }}
-      />
-      <Button form="dynamicForm" htmlType="submit">
-        Submit
-      </Button>
+      <div className="max-w-[720px] mx-auto p-4 rounded-xl border-4 border-blue-100">
+        <h1 className="text-center text-2xl">dynamic form</h1>
+        {/* {moment(new Date(), "YYYY-MM-DD HH:mm:ss").toString()} */}
+        <FormGenerator
+          onFinish={handleSubmit}
+          data={dataForm}
+          id="dynamicForm"
+          size="default" //small , default , large
+          layout="vertical" //vertical, horizontal
+          scrollToFirstError={true} //scroll to first error
+          // formStyle={{ maxWidth: "100%" }}
+        />
+        <Button form="dynamicForm" htmlType="submit" className="mt-3">
+          Submit
+        </Button>
+      </div>
     </>
   );
 }

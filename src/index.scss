@@ -1,12 +1,34 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400&display=swap");
 
-.ant-form-item-label label{
-  font-size: 14px !important;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Raleway", sans-serif !important;
+  font-weight: 400;
 }
 
-.ant-form-item-label{
-  padding-bottom: 0px !important;
+input {
+  width: 100% !important;
 }
 
+.ant-form-item-label {
+  padding-bottom: 2px !important;
+  label {
+    font-size: 14px !important;
+  }
+}
+
+.ant-upload-select {
+  margin-bottom: 0 !important;
+}
+
+.ant-switch-inner {
+  .ant-switch-inner-unchecked & {
+    background: #e3e3e3 !important;
+  }
+}
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

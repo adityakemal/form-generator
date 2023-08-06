@@ -45,6 +45,7 @@ export default function FormGenerator({
   scrollToFirstError,
 }) {
   const formRef = useRef(null);
+  const [hookForm] = Form.useForm();
   const [imageUrl, setImageUrl] = useState("");
 
   const handleChangeSingleImage = async (info, name, uploadType) => {
@@ -83,14 +84,9 @@ export default function FormGenerator({
     <>
       <Form
         ref={formRef}
+        form={hookForm}
         id={id}
         onFinishFailed={(failData) => console.log(failData)}
-        labelCol={{
-          span: 0,
-        }}
-        wrapperCol={{
-          span: 14,
-        }}
         onFinish={(value) => {
           //filter value formatted
           for (const objForm of data) {
@@ -127,6 +123,68 @@ export default function FormGenerator({
                 <Input placeholder={res?.placeholder} />
               </Form.Item>
             );
+          //EMAIL
+          if (res.type === "email") {
+            return (
+              <Form.Item
+                key={i}
+                label={res.label}
+                name={res.name}
+                rules={[
+                  ...res.rules,
+                  {
+                    type: "email",
+                    message: "The input is not valid E-mail!",
+                  },
+                ]}
+              >
+                <Input placeholder={res.placeholder} />
+              </Form.Item>
+            );
+          }
+          //PASSWORD
+          if (res.type === "password") {
+            return (
+              <Form.Item
+                key={i}
+                label={res?.label}
+                name={res?.name}
+                rules={res?.rules}
+              >
+                <Input.Password placeholder={res?.placeholder} />
+              </Form.Item>
+            );
+          }
+          //CONFIRM PASSWORD
+          if (res.type === "confirm_password") {
+            return (
+              <Form.Item
+                key={i}
+                label={res?.label}
+                name={res?.name}
+                rules={[
+                  ...res?.rules,
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (
+                        !value ||
+                        getFieldValue(res.confirmationWith) === value
+                      ) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error(
+                          "The new password that you entered do not match!"
+                        )
+                      );
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password placeholder={res?.placeholder} />
+              </Form.Item>
+            );
+          }
           //NUMBER
           if (res?.type === "number") {
             return (
@@ -233,8 +291,18 @@ export default function FormGenerator({
                 key={i}
                 name={res.name}
                 rules={res?.rules}
+                valuePropName="checked"
+                // initialValue
               >
-                <Switch defaultChecked={false} />
+                <Switch
+                  style={{
+                    background: Form.useWatch(res?.name, hookForm)
+                      ? "green"
+                      : "gray",
+                  }}
+                  checkedChildren={res?.checkedChildren}
+                  unCheckedChildren={res?.unCheckedChildren}
+                />
               </Form.Item>
             );
           }
@@ -303,6 +371,7 @@ export default function FormGenerator({
                 key={i}
                 name={res.name}
                 rules={res?.rules}
+                valuePropName="string || {}"
               >
                 <Upload
                   listType="picture-card"
