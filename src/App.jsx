@@ -1,10 +1,12 @@
 import moment from "moment";
 // import "moment/locale/id";
 import "./App.css";
-import { Button } from "antd";
+import { Button, Form } from "antd";
 import FormGenerator from "./components/FormGenerator";
 
 function App() {
+  const [hookFormGenerator] = Form.useForm();
+
   const dataForm = [
     //TEXT
     {
@@ -201,6 +203,10 @@ function App() {
       uploadType: "file", //default= 'file', options= "base64", "file", type string
       rules: [{ required: true, message: "This field is required!" }],
     },
+    {
+      type: "separator",
+      label: "JUDUL SEPARATOR",
+    },
   ];
 
   const handleSubmit = (value) => {
@@ -209,10 +215,11 @@ function App() {
 
   return (
     <>
-      <div className="max-w-[720px] mx-auto p-4 rounded-xl border-4 border-blue-100">
+      <div className="max-w-[768px] mx-auto p-[24px] rounded-xl border-4 border-blue-100">
         <h1 className="text-center text-2xl">dynamic form</h1>
         {/* {moment(new Date(), "YYYY-MM-DD HH:mm:ss").toString()} */}
         <FormGenerator
+          hookForm={hookFormGenerator}
           onFinish={handleSubmit}
           data={dataForm}
           id="dynamicForm"

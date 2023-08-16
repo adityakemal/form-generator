@@ -18,6 +18,7 @@ import {
   Upload,
   message,
 } from "antd";
+import { useEffect } from "react";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
@@ -43,9 +44,11 @@ export default function FormGenerator({
   layout,
   formStyle,
   scrollToFirstError,
+  labelCol,
+  wrapperCol,
+  hookForm,
 }) {
   const formRef = useRef(null);
-  const [hookForm] = Form.useForm();
   const [imageUrl, setImageUrl] = useState("");
 
   const handleChangeSingleImage = async (info, name, uploadType) => {
@@ -85,6 +88,7 @@ export default function FormGenerator({
       <Form
         ref={formRef}
         form={hookForm}
+        autoComplete={false}
         id={id}
         onFinishFailed={(failData) => console.log(failData)}
         onFinish={(value) => {
@@ -109,6 +113,8 @@ export default function FormGenerator({
         scrollToFirstError={scrollToFirstError}
         // disabled={componentDisabled}
         style={{ ...formStyle }}
+        labelCol={{ ...labelCol }}
+        wrapperCol={{ ...wrapperCol }}
       >
         {data.map((res, i) => {
           //TEXT
@@ -195,6 +201,7 @@ export default function FormGenerator({
                 rules={res?.rules}
               >
                 <InputNumber
+                  style={{ minWidth: 140 }}
                   placeholder={res?.placeholder}
                   min={res?.min}
                   max={res?.max}
@@ -224,13 +231,21 @@ export default function FormGenerator({
                 name={res.name}
                 rules={res?.rules}
               >
-                <Select placeholder={res.placeholder}>
-                  {res.options.map((option, optIdx) => (
-                    <Select.Option key={optIdx} value={option.value}>
-                      {option.label}
-                    </Select.Option>
-                  ))}
-                </Select>
+                <Select
+                  placeholder={res.placeholder}
+                  showSearch
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={res.options.map((option, optIdx) => ({
+                    label: option.label,
+                    value: option.value,
+                  }))}
+                  onChange={res?.onChange}
+                />
               </Form.Item>
             );
           if (res?.type === "checkbox") {
@@ -415,6 +430,15 @@ export default function FormGenerator({
                   )} */}
                 </Upload>
               </Form.Item>
+            );
+          }
+          if (res?.type === "separator") {
+            return (
+              <>
+                <h3 className={`text-center ${res?.className} my-5`}>
+                  {res?.label}
+                </h3>
+              </>
             );
           }
         })}
