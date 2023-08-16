@@ -1,10 +1,8 @@
 import React, { useRef, useState } from "react";
 import moment from "moment";
-import { PlusOutlined } from "@ant-design/icons";
 
 import {
   Button,
-  Cascader,
   Checkbox,
   DatePicker,
   Form,
@@ -14,19 +12,11 @@ import {
   Select,
   Slider,
   Switch,
-  TreeSelect,
   Upload,
   message,
 } from "antd";
-import { useEffect } from "react";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-
-// const getBase64 = (img, callback) => {
-//   const reader = new FileReader();
-//   reader.addEventListener("load", () => callback(reader.result));
-//   reader.readAsDataURL(img);
-// };
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -43,7 +33,6 @@ export default function FormGenerator({
   size,
   layout,
   formStyle,
-  scrollToFirstError,
   labelCol,
   wrapperCol,
   hookForm,
@@ -73,7 +62,6 @@ export default function FormGenerator({
         // prettier-ignore
         formRef.current.setFieldValue(name,uploadType === "base64" ? url : file); //validate upload type
       } else {
-        // const imgValueBefore = formRef.current.getFieldValue(name);
         formRef.current.setFieldValue(name, undefined);
         setImageUrl("");
       }
@@ -110,7 +98,12 @@ export default function FormGenerator({
         }}
         layout={layout}
         size={size}
-        scrollToFirstError={scrollToFirstError}
+        scrollToFirstError={{
+          //make error visible in the middle
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        }}
         // disabled={componentDisabled}
         style={{ ...formStyle }}
         labelCol={{ ...labelCol }}
@@ -233,6 +226,7 @@ export default function FormGenerator({
               >
                 <Select
                   placeholder={res.placeholder}
+                  // maxTagCount="responsive"
                   showSearch
                   optionFilterProp="children"
                   filterOption={(input, option) =>
@@ -240,10 +234,7 @@ export default function FormGenerator({
                       .toLowerCase()
                       .includes(input.toLowerCase())
                   }
-                  options={res.options.map((option, optIdx) => ({
-                    label: option.label,
-                    value: option.value,
-                  }))}
+                  options={res.options}
                   onChange={res?.onChange}
                 />
               </Form.Item>
@@ -301,6 +292,7 @@ export default function FormGenerator({
           }
           //SWITCH
           if (res?.type === "switch") {
+            const isValueTrue = Form.useWatch(res?.name, hookForm);
             return (
               <Form.Item
                 label={res.label}
@@ -312,9 +304,7 @@ export default function FormGenerator({
               >
                 <Switch
                   style={{
-                    background: Form.useWatch(res?.name, hookForm)
-                      ? "green"
-                      : "gray",
+                    background: isValueTrue ? "green" : "gray",
                   }}
                   checkedChildren={res?.checkedChildren}
                   unCheckedChildren={res?.unCheckedChildren}
@@ -435,7 +425,7 @@ export default function FormGenerator({
           if (res?.type === "separator") {
             return (
               <>
-                <h3 className={`text-center ${res?.className} my-5`}>
+                <h3 className={`text-center ${res?.className} py-5`}>
                   {res?.label}
                 </h3>
               </>

@@ -225,7 +225,6 @@ function App() {
           id="dynamicForm"
           size="default" //small , default , large
           layout="vertical" //vertical, horizontal
-          scrollToFirstError={true} //scroll to first error
           // formStyle={{ maxWidth: "100%" }}
         />
         <Button form="dynamicForm" htmlType="submit" className="mt-3">
