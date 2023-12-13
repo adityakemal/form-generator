@@ -83,14 +83,18 @@ export default function FormGenerator({
           //filter value formatted
           for (const objForm of data) {
             if (objForm.type === "date") {
-              value[objForm.name] = moment(value[objForm.name]).format(
-                objForm.payloadFormat
-              );
+              value[objForm.name] = moment(
+                new Date(value[objForm.name])
+              ).format(objForm.payloadFormat);
             }
             if (objForm.type === "range") {
               value[objForm.name] = [
-                moment(value[objForm.name][0]).format(objForm.payloadFormat),
-                moment(value[objForm.name][1]).format(objForm.payloadFormat),
+                moment(new Date(value[objForm.name][0])).format(
+                  objForm.payloadFormat
+                ),
+                moment(new Date(value[objForm.name][1])).format(
+                  objForm.payloadFormat
+                ),
               ];
             }
           }
