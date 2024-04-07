@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 
 import {
   Button,
@@ -72,7 +72,7 @@ export default function FormGenerator({
   };
 
   return (
-    <>
+    <div>
       <Form
         ref={formRef}
         form={hookForm}
@@ -83,16 +83,16 @@ export default function FormGenerator({
           //filter value formatted
           for (const objForm of data) {
             if (objForm.type === "date") {
-              value[objForm.name] = moment(
-                new Date(value[objForm.name])
-              ).format(objForm.payloadFormat);
+              value[objForm.name] = dayjs(new Date(value[objForm.name])).format(
+                objForm.payloadFormat
+              );
             }
             if (objForm.type === "range") {
               value[objForm.name] = [
-                moment(new Date(value[objForm.name][0])).format(
+                dayjs(new Date(value[objForm.name][0])).format(
                   objForm.payloadFormat
                 ),
-                moment(new Date(value[objForm.name][1])).format(
+                dayjs(new Date(value[objForm.name][1])).format(
                   objForm.payloadFormat
                 ),
               ];
@@ -294,7 +294,7 @@ export default function FormGenerator({
               </Form.Item>
             );
           }
-          //SWITCH
+          // //SWITCH
           if (res?.type === "switch") {
             const isValueTrue = Form.useWatch(res?.name, hookForm);
             return (
@@ -330,8 +330,8 @@ export default function FormGenerator({
                   disabledDate={(current) => {
                     return (
                       (current &&
-                        current < moment(res?.minDate, "YYYY-MM-DD")) ||
-                      current > moment(res?.maxDate, "YYYY-MM-DD")
+                        current < dayjs(res?.minDate, "YYYY-MM-DD")) ||
+                      current > dayjs(res?.maxDate, "YYYY-MM-DD")
                     );
                   }}
                 />
@@ -352,8 +352,8 @@ export default function FormGenerator({
                   disabledDate={(current) => {
                     return (
                       (current &&
-                        current < moment(res?.minDate, "YYYY-MM-DD")) ||
-                      current > moment(res?.maxDate, "YYYY-MM-DD")
+                        current < dayjs(res?.minDate, "YYYY-MM-DD")) ||
+                      current > dayjs(res?.maxDate, "YYYY-MM-DD")
                     );
                   }}
                 />
@@ -435,8 +435,9 @@ export default function FormGenerator({
               </>
             );
           }
+          return;
         })}
       </Form>
-    </>
+    </div>
   );
 }
