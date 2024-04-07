@@ -231,6 +231,7 @@ export default function FormGenerator({
                 <Select
                   placeholder={res.placeholder}
                   // maxTagCount="responsive"
+                  popupMatchSelectWidth={false} // make scrollable options
                   showSearch
                   optionFilterProp="children"
                   filterOption={(input, option) =>
