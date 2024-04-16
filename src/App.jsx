@@ -232,7 +232,7 @@ function App() {
   ];
 
   const handleSubmit = (value) => {
-    console.log(value, "finished");
+    console.log(value, "finished value");
   };
 
   const valueWatch = Form.useWatch([], hookFormGenerator);
